@@ -1,6 +1,7 @@
 import '../../domain/entities/wellness_data.dart';
 import '../../domain/repositories/wellness_repository.dart';
 
+/// a mock implementation of [WellnessRepository] for development and testing.
 class MockWellnessDataSource implements WellnessRepository {
   int _steps = 7540;
 
@@ -34,6 +35,5 @@ class MockWellnessDataSource implements WellnessRepository {
   Future<void> addEntry(WellnessData data) async {
     await Future.delayed(const Duration(seconds: 1));
     _steps += data.steps;
-    // In a real app, this would save to local DB or API
   }
 }

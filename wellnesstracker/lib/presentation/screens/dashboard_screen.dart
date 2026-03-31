@@ -10,6 +10,7 @@ import 'add_entry_screen.dart';
 
 import '../widgets/neo_background.dart';
 
+/// The main dashboard screen showing an overview of daily and weekly wellness metrics.
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -50,8 +51,8 @@ class DashboardScreen extends StatelessWidget {
                   ],
                 ),
               ),
-        );
-      }),
+          );
+        }),
       ),
       floatingActionButton: NeoButton(
         onPressed: () => Get.to(() => const AddEntryScreen()),
@@ -74,7 +75,9 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  /// Builds the transparent app bar with theme toggle.
   Widget _buildAppBar(BuildContext context) {
+    final theme = Theme.of(context);
     return SliverAppBar(
       floating: true,
       backgroundColor: Colors.transparent,
@@ -82,7 +85,7 @@ class DashboardScreen extends StatelessWidget {
       title: Text(
         "Wellness Tracker",
         style: TextStyle(
-          color: Theme.of(context).primaryColor,
+          color: theme.primaryColor,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -93,47 +96,47 @@ class DashboardScreen extends StatelessWidget {
           ),
           icon: Icon(
             Get.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-            color: Theme.of(context).primaryColor,
+            color: theme.primaryColor,
           ),
         ),
       ],
     );
   }
 
+  /// Builds the welcome header section.
   Widget _buildHeader(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Today's Overview",
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
           "Stay consistent, stay healthy!",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey,
-              ),
+          style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
         ),
       ],
     );
   }
 
+  /// Builds the primary step-tracking circular gauge.
   Widget _buildMainCircularProgress(BuildContext context, dynamic data) {
+    final primaryColor = Theme.of(context).primaryColor;
     return Center(
       child: NeoCircularProgress(
-        progress: data.stepsProgress,
+        progress: data?.stepsProgress ?? 0,
         size: context.scaled(220),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ShaderMask(
               shaderCallback: (bounds) => LinearGradient(
-                colors: [Theme.of(context).primaryColor, Colors.blueAccent],
+                colors: [primaryColor, Colors.blueAccent],
               ).createShader(bounds),
               child: Text(
-                "${data.steps}",
+                "${data?.steps ?? 0}",
                 style: TextStyle(
                   fontSize: context.scaled(36),
                   fontWeight: FontWeight.bold,
@@ -141,11 +144,19 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Text("STEPS", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, letterSpacing: 1.2, fontSize: context.scaled(12))),
+            Text(
+              "STEPS", 
+              style: TextStyle(
+                color: Colors.grey, 
+                fontWeight: FontWeight.bold, 
+                letterSpacing: 1.2, 
+                fontSize: context.scaled(12)
+              )
+            ),
             Transform.translate(
               offset: Offset(0, context.scaled(5)),
               child: Text(
-                "Goal: ${((data.steps / data.stepsProgress) / 1000).toStringAsFixed(0)}k", 
+                "Goal: ${(data != null ? ((data.steps / data.stepsProgress) / 1000).toStringAsFixed(0) : "0")}k", 
                 style: TextStyle(fontSize: context.scaled(12), color: Colors.grey, fontWeight: FontWeight.w300),
               ),
             ),
@@ -155,18 +166,17 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  /// Builds the grid of secondary wellness metrics (Water, Sleep, Calories).
   Widget _buildMetricsGrid(BuildContext context, dynamic data) {
-    // For smaller tablets, 3 is too cramped. Use 2 if width < 600.
-    final crossAxisCount = (context.screenWidth > 450 && context.screenWidth < 600) 
+    final screenWidth = context.screenWidth;
+    final crossAxisCount = (screenWidth > 450 && screenWidth < 600) 
         ? 2 
         : context.gridCrossAxisCount.toInt();
     
-    // Fix aspect ratio specifically for tablet to avoid tall overflow.
     double aspectRatio = 1.1;
     if (context.isNeoMobile) {
       aspectRatio = 0.9;
     } else if (context.isNeoTablet) {
-      // For narrow tablets using 2 columns, they need more vertical space
       aspectRatio = crossAxisCount == 2 ? 0.95 : 1.2;
     }
 
@@ -181,24 +191,24 @@ class DashboardScreen extends StatelessWidget {
         _buildMetricCard(
           context,
           "Water",
-          "${data.waterIntake}L",
-          data.waterProgress,
+          "${data?.waterIntake ?? 0}L",
+          data?.waterProgress ?? 0,
           Icons.water_drop,
           Colors.blue,
         ),
         _buildMetricCard(
           context,
           "Sleep",
-          "${data.sleepHours}h",
-          data.sleepProgress,
+          "${data?.sleepHours ?? 0}h",
+          data?.sleepProgress ?? 0,
           Icons.bedtime,
           Colors.orange,
         ),
         _buildMetricCard(
           context,
           "Calories",
-          "${data.caloriesBurned}",
-          data.caloriesProgress,
+          "${data?.caloriesBurned ?? 0}",
+          data?.caloriesProgress ?? 0,
           Icons.local_fire_department,
           Colors.red,
         ),
@@ -206,6 +216,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  /// Builds an individual tappable metric card.
   Widget _buildMetricCard(
     BuildContext context,
     String label,
@@ -252,15 +263,17 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  /// Helper to build the percentage achieved text beneath metrics.
   Widget _buildInformativeText(BuildContext context, double progress) {
-    String text = "${(progress * 100).toStringAsFixed(0)}% achieved";
     return Text(
-      text,
+      "${(progress * 100).toStringAsFixed(0)}% achieved",
       style: TextStyle(fontSize: context.scaled(9), color: Colors.grey, fontStyle: FontStyle.italic),
     );
   }
 
+  /// Builds the weekly step intensity bar chart.
   Widget _buildWeeklyProgressChart(BuildContext context, List<dynamic> weeklyData) {
+    final primaryColor = Theme.of(context).primaryColor;
     return NeoCard(
       isGlass: true,
       child: Column(
@@ -270,7 +283,7 @@ class DashboardScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("WEEKLY PERFORMANCE", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2, fontSize: context.scaled(12))),
-              Text("Avg: 7.2k", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: context.scaled(10), fontWeight: FontWeight.bold)),
+              Text("Avg: 7.2k", style: TextStyle(color: primaryColor, fontSize: context.scaled(10), fontWeight: FontWeight.bold)),
             ],
           ),
           24.vSpace,
@@ -307,7 +320,7 @@ class DashboardScreen extends StatelessWidget {
                                 end: Alignment.bottomCenter,
                                 colors: isToday 
                                   ? [Colors.orange, Colors.redAccent]
-                                  : [Theme.of(context).primaryColor.withValues(alpha: 0.8), Theme.of(context).primaryColor],
+                                  : [primaryColor.withValues(alpha: 0.8), primaryColor],
                               ),
                               borderRadius: BorderRadius.circular(context.scaled(8)),
                               boxShadow: isToday ? [
@@ -327,7 +340,7 @@ class DashboardScreen extends StatelessWidget {
                       _getWeekdayShort(data.date),
                       style: TextStyle(
                         fontSize: context.scaled(10), 
-                        color: isToday ? Theme.of(context).primaryColor : Colors.grey,
+                        color: isToday ? primaryColor : Colors.grey,
                         fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
@@ -341,7 +354,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-
+  /// Returns a one-letter weekday shorthand.
   String _getWeekdayShort(DateTime date) {
     const days = ["M", "T", "W", "T", "F", "S", "S"];
     return days[date.weekday - 1];

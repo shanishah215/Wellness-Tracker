@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/neomorphic_utility.dart';
 
+/// A Neomorphic button that provides visual feedback when pressed.
 class NeoButton extends StatefulWidget {
+  /// The widget to display inside the button.
   final Widget child;
+
+  /// The callback to execute when the button is pressed.
   final VoidCallback onPressed;
+
+  /// The radius of the button's corners. Defaults to 15.
   final double borderRadius;
+
+  /// The padding around the child. Defaults to vertical 12, horizontal 24.
   final EdgeInsetsGeometry padding;
 
   const NeoButton({
@@ -33,6 +41,8 @@ class _NeoButtonState extends State<NeoButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Listener(
       onPointerDown: _onPointerDown,
       onPointerUp: _onPointerUp,
@@ -40,10 +50,10 @@ class _NeoButtonState extends State<NeoButton> {
         duration: const Duration(milliseconds: 100),
         padding: widget.padding,
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(widget.borderRadius),
           boxShadow: _isPressed
-              ? [] // Or small inner shadows
+              ? [] 
               : NeoUtils.outerShadow(context: context),
           gradient: NeoUtils.neoGradient(context: context, isPressed: _isPressed),
         ),

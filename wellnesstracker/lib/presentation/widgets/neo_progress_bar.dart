@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/neomorphic_utility.dart';
 
+/// A Neomorphic linear progress bar.
 class NeoProgressBar extends StatelessWidget {
-  final double progress; // 0.0 to 1.0
+  /// Progress value between 0.0 and 1.0.
+  final double progress;
+
+  /// Height of the progress bar. Defaults to 12.
   final double height;
+
+  /// Custom color for the progress indicator. Defaults to primary color.
   final Color? color;
 
   const NeoProgressBar({
@@ -15,19 +21,22 @@ class NeoProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final indicatorColor = color ?? theme.primaryColor;
+
     return Stack(
       children: [
-        // Track
+        // Track with inner shadow
         Container(
           height: height,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: theme.scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(height / 2),
             boxShadow: NeoUtils.innerShadow(context: context, offset: 2, blurRadius: 4),
           ),
         ),
-        // Progress
+        // Animated Progress indicator
         FractionallySizedBox(
           widthFactor: progress.clamp(0.0, 1.0),
           child: Container(
@@ -35,14 +44,14 @@ class NeoProgressBar extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  (color ?? Theme.of(context).primaryColor).withOpacity(0.7),
-                  color ?? Theme.of(context).primaryColor,
+                  indicatorColor.withValues(alpha: 0.7),
+                  indicatorColor,
                 ],
               ),
               borderRadius: BorderRadius.circular(height / 2),
               boxShadow: [
                 BoxShadow(
-                  color: (color ?? Theme.of(context).primaryColor).withOpacity(0.3),
+                  color: indicatorColor.withValues(alpha: 0.3),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -55,11 +64,22 @@ class NeoProgressBar extends StatelessWidget {
   }
 }
 
+/// A Neomorphic circular progress indicator.
 class NeoCircularProgress extends StatelessWidget {
+  /// Progress value between 0.0 and 1.0.
   final double progress;
+
+  /// External size (diameter) of the widget.
   final double size;
+
+  /// Thickness of the progress ring.
   final double strokeWidth;
+
+  /// Optional widget to display in the center of the ring.
   final Widget? child;
+
+  /// Optional color for the progress ring.
+  final Color? color;
 
   const NeoCircularProgress({
     super.key,
@@ -67,23 +87,26 @@ class NeoCircularProgress extends StatelessWidget {
     this.size = 150,
     this.strokeWidth = 15,
     this.child,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
       height: size,
       width: size,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Track
+          // Background track with outer shadow
           Container(
             height: size,
             width: size,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Theme.of(context).scaffoldBackgroundColor,
+              color: theme.scaffoldBackgroundColor,
               boxShadow: NeoUtils.outerShadow(context: context),
             ),
           ),
@@ -95,7 +118,7 @@ class NeoCircularProgress extends StatelessWidget {
               value: progress,
               strokeWidth: strokeWidth,
               backgroundColor: Colors.transparent,
-              valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+              valueColor: AlwaysStoppedAnimation<Color>(color ?? theme.primaryColor),
               strokeCap: StrokeCap.round,
             ),
           ),

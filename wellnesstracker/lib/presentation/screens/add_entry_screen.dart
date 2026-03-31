@@ -26,61 +26,70 @@ class AddEntryScreen extends StatelessWidget {
           child: Column(
             children: [
               NeoCard(
-              isGlass: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Enter Activity Details", style: TextStyle(fontWeight: FontWeight.bold, fontSize: context.scaled(18))),
-                  24.vSpace,
-                  const NeoTextField(
-                    hintText: "Steps",
-                    prefixIcon: Icons.directions_run,
-                  ),
-                  16.vSpace,
-                  const NeoTextField(
-                    hintText: "Water (L)",
-                    prefixIcon: Icons.water_drop,
-                  ),
-                  16.vSpace,
-                  const NeoTextField(
-                    hintText: "Sleep (h)",
-                    prefixIcon: Icons.bedtime,
-                  ),
-                  16.vSpace,
-                  const NeoTextField(
-                    hintText: "Calories",
-                    prefixIcon: Icons.local_fire_department,
-                  ),
-                  24.vSpace,
-                  NeoButton(
-                    onPressed: () async {
-                      final controller = Get.find<DashboardController>();
-                      // Mocking data based on input or just a new entry
-                      final newEntry = WellnessData(
-                        steps: 1000, // In practice, read from text fields
-                        waterIntake: 0.5,
-                        sleepHours: 1.0,
-                        caloriesBurned: 100,
-                        date: DateTime.now(),
-                      );
-                      
-                      await controller.addEntry(newEntry);
-                      Get.back();
-                      Get.snackbar("Success", "Entry added successfully!", 
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.green.withOpacity(0.1),
-                        colorText: Colors.green,
-                      );
-                    },
-                    child: Center(child: Text("Add Activity", style: TextStyle(fontSize: context.scaled(16)))),
-                  ),
-
-                ],
+                isGlass: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Enter Activity Details",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: context.scaled(18)),
+                    ),
+                    24.vSpace,
+                    const NeoTextField(
+                      hintText: "Steps",
+                      prefixIcon: Icons.directions_run,
+                    ),
+                    16.vSpace,
+                    const NeoTextField(
+                      hintText: "Water (L)",
+                      prefixIcon: Icons.water_drop,
+                    ),
+                    16.vSpace,
+                    const NeoTextField(
+                      hintText: "Sleep (h)",
+                      prefixIcon: Icons.bedtime,
+                    ),
+                    16.vSpace,
+                    const NeoTextField(
+                      hintText: "Calories",
+                      prefixIcon: Icons.local_fire_department,
+                    ),
+                    24.vSpace,
+                    NeoButton(
+                      onPressed: () async {
+                        final controller = Get.find<DashboardController>();
+                        
+                        final newEntry = WellnessData(
+                          steps: 1000, 
+                          waterIntake: 0.5,
+                          sleepHours: 1.0,
+                          caloriesBurned: 100,
+                          date: DateTime.now(),
+                        );
+                        
+                        await controller.addEntry(newEntry);
+                        Get.back();
+                        Get.snackbar(
+                          "Success", 
+                          "Entry added successfully!", 
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.green.withValues(alpha: 0.1),
+                          colorText: Colors.green,
+                        );
+                      },
+                      child: Center(
+                        child: Text(
+                          "Add Activity", 
+                          style: TextStyle(fontSize: context.scaled(16), fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

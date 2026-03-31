@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Manages the application's light and dark theme configurations.
+/// Tailored for Neomorphic and Glassmorphic UI designs.
 class AppTheme {
-  // Neomorphic color palette (Light)
   static const Color lightScaffoldColor = Color(0xFFE0E5EC);
   static const Color lightPrimaryColor = Color(0xFF2E5EAA);
 
-  // Neomorphic color palette (Dark)
   static const Color darkScaffoldColor = Color(0xFF25292F);
   static const Color darkPrimaryColor = Color(0xFF5CCAD4);
 
+  /// Returns the light theme configuration.
   static ThemeData lightTheme() {
     return ThemeData(
       useMaterial3: true,
@@ -28,6 +29,7 @@ class AppTheme {
     );
   }
 
+  /// Returns the dark theme configuration.
   static ThemeData darkTheme() {
     return ThemeData(
       useMaterial3: true,

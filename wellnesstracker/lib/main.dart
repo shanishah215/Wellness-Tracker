@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'core/theme/app_theme.dart';
 import 'data/data_sources/mock_wellness_data_source.dart';
@@ -12,10 +10,13 @@ import 'presentation/screens/dashboard_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   
+  // Dependency injection: Initialize the data source and controller.
   Get.put(DashboardController(repository: MockWellnessDataSource()));
+  
   runApp(const WellnessApp());
 }
 
+/// The root widget of the Wellness Tracker application.
 class WellnessApp extends StatelessWidget {
   const WellnessApp({super.key});
 
