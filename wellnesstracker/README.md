@@ -9,6 +9,12 @@ A production-ready, beautiful, and fully responsive Wellness Tracking App built 
 - **Slick State Management**: Leverages GetX controllers for robust reactive programming uncoupled from UI bloat.
 - **Glassmorphism**: Stunning frosted glass cards overlaying ambient glowing orbs.
 
+## App Showcase
+
+| Screenshot 1 | Screenshot 2 | Screenshot 3 |
+|:---:|:---:|:---:|
+| <img src="2.png" alt="Screenshot 2"> | <img src="1.png" alt="Screenshot 1"> | <img src="3.png" alt="Screenshot 3"> |
+
 ## Reusable UI Components
 The application features a fully modularized design system located in `lib/presentation/widgets/`. These ready-to-use custom widgets allow you to effortlessly build new screens following the Neomorphic aesthetic:
 
