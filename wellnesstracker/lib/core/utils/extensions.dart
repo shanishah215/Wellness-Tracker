@@ -24,9 +24,9 @@ extension ResponsiveExtension on BuildContext {
   /// Returns the optimal grid cross-axis count for the current screen size.
   double get gridCrossAxisCount {
     if (isNeoMobile) return 2;
-    if (isNeoTablet) return 3;
+    if (isNeoTablet) return 2; // Switched to 2 for better alignment of 4 cards
     if (isNeoDesktop) return 4;
-    return 6;
+    return 4;
   }
 
   /// Calculates a scaling factor to adjust font sizes and dimensions across devices.

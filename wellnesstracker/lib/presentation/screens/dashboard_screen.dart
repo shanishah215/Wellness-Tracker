@@ -121,31 +121,34 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  /// Builds the primary step-tracking circular gauge.
+  /// Builds the primary daily overview circular gauge.
   Widget _buildMainCircularProgress(BuildContext context, dynamic data) {
     final primaryColor = Theme.of(context).primaryColor;
+    final progress = data?.overallProgress ?? 0.0;
+    
     return Center(
       child: NeoCircularProgress(
-        progress: data?.stepsProgress ?? 0,
+        progress: progress,
         size: context.scaled(220),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ShaderMask(
               shaderCallback: (bounds) => LinearGradient(
-                colors: [primaryColor, Colors.blueAccent],
+                colors: [primaryColor, Colors.tealAccent],
               ).createShader(bounds),
               child: Text(
-                "${data?.steps ?? 0}",
+                "${(progress * 100).toStringAsFixed(0)}%",
                 style: TextStyle(
-                  fontSize: context.scaled(36),
+                  fontSize: context.scaled(48),
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
+                  letterSpacing: -1,
                 ),
               ),
             ),
             Text(
-              "STEPS", 
+              "DAILY SCORE", 
               style: TextStyle(
                 color: Colors.grey, 
                 fontWeight: FontWeight.bold, 
@@ -156,7 +159,7 @@ class DashboardScreen extends StatelessWidget {
             Transform.translate(
               offset: Offset(0, context.scaled(5)),
               child: Text(
-                "Goal: ${(data != null ? ((data.steps / data.stepsProgress) / 1000).toStringAsFixed(0) : "0")}k", 
+                "Keep moving!", 
                 style: TextStyle(fontSize: context.scaled(12), color: Colors.grey, fontWeight: FontWeight.w300),
               ),
             ),
@@ -211,6 +214,14 @@ class DashboardScreen extends StatelessWidget {
           data?.caloriesProgress ?? 0,
           Icons.local_fire_department,
           Colors.red,
+        ),
+        _buildMetricCard(
+          context,
+          "Steps",
+          "${data?.steps ?? 0}",
+          data?.stepsProgress ?? 0,
+          Icons.directions_walk,
+          Colors.green,
         ),
       ],
     );

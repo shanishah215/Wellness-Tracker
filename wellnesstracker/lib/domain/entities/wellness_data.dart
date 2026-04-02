@@ -18,4 +18,5 @@ class WellnessData {
   double get waterProgress => (waterIntake / 3.0).clamp(0.0, 1.0);
   double get sleepProgress => (sleepHours / 8.0).clamp(0.0, 1.0);
   double get caloriesProgress => (caloriesBurned / 2500).clamp(0.0, 1.0);
+  double get overallProgress => (stepsProgress + waterProgress + sleepProgress + caloriesProgress) / 4.0;
 }
